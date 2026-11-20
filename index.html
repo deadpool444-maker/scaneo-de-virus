@@ -4,67 +4,181 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Protocolo Sombra</title>
+<title>MATRIX REMOTE SCAN</title>
 <style>
-body {
-  background: #080808;
-  color: #00ff75;
-  font-family: monospace;
-  text-align: center;
-  padding: 25px 12px;
+*{box-sizing:border-box}
+body{
+ margin:0;padding:18px;background:#030605;
+ color:#00ff80;font-family:monospace;
 }
-h1 { color: #ff3030; }
-.panel {
-  border: 1px solid #00ff75;
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 450px;
-  margin: auto;
+main{max-width:650px;margin:auto}
+header{text-align:center;padding:20px 0;border-bottom:1px solid #087b42}
+h1{font-size:27px;color:#00ff80;text-shadow:0 0 15px #00ff80}
+.sub{font-size:10px;color:#75a58a;letter-spacing:3px}
+.panel{
+ background:#07110c;border:1px solid #087b42;
+ padding:16px;margin:16px 0;border-radius:5px;
+ box-shadow:0 0 15px #003c20;
 }
-button {
-  background: #00aa55;
-  color: black;
-  padding: 14px 22px;
-  border: 0;
-  border-radius: 7px;
-  font-weight: bold;
-  margin-top: 20px;
+.red{color:#ff3030}
+.green{color:#00ff80}
+button{
+ width:100%;padding:17px;margin-top:12px;
+ background:#00dc70;color:#001b0c;
+ border:0;border-radius:4px;
+ font-family:monospace;font-weight:bold;font-size:16px;
 }
-#resultado { display: none; color: white; }
+button:disabled{opacity:.5}
+.hidden{display:none}
+.track{height:13px;background:#17251c;margin-top:15px}
+#bar{height:100%;width:0;background:#00ff80;transition:width .5s}
+#percent{text-align:right;margin-top:8px}
+#terminal{height:230px;overflow:auto;font-size:12px;line-height:1.8}
+.blink{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.2}}
+.warning{color:#ff3030;text-align:center}
+#count{font-size:65px;text-align:center;color:#ff3030}
+#ending{text-align:center}
+footer{text-align:center;color:#557363;font-size:10px;margin:25px}
 </style>
 </head>
+
 <body>
+<main>
+
+<header>
+ <div class="sub">ADVANCED SECURITY INTERFACE</div>
+ <h1>MATRIX REMOTE SCAN</h1>
+ <div class="sub">SECURITY LAB · SIMULATION v5.0</div>
+</header>
+
 <div class="panel">
-<h1>PROTOCOLO SOMBRA</h1>
-<p>SIMULACIÓN VISUAL DE SEGURIDAD</p>
-<p id="estado">Preparando diagnóstico...</p>
-<h2 id="progreso">0%</h2>
-<button id="iniciar" onclick="iniciar()">INICIAR SIMULACIÓN</button>
-<div id="resultado">
-<h1>😂 ¡ERA UNA BROMA!</h1>
-<p>Tu teléfono está bien.</p>
-<p>No se modificó ningún archivo ni configuración.</p>
+ <div class="red">● SISTEMA DE DIAGNÓSTICO</div>
+ <p>Motor: MATRIX SIMULATION ENGINE</p>
+ <p>Estado: <span class="green">EN ESPERA</span></p>
+ <p>Modo: DEMOSTRACIÓN FICTICIA</p>
+ <button id="start" onclick="startScan()">
+ ▶ INICIAR DIAGNÓSTICO
+ </button>
 </div>
+
+<div id="scan" class="hidden">
+
+ <div class="panel">
+  <div class="red blink">● ESCANEO VISUAL EN PROCESO</div>
+  <div class="track"><div id="bar"></div></div>
+  <div id="percent">0%</div>
+ </div>
+
+ <div class="panel">
+  <div class="green">TERMINAL DE SISTEMA</div>
+  <div id="terminal"></div>
+ </div>
+
+ <div class="panel">
+  <div class="red">REGISTRO DE EVENTOS</div>
+  <p id="events">Esperando eventos...</p>
+ </div>
+
 </div>
+
+<div id="countdown" class="panel hidden">
+ <h2 class="warning">FINALIZANDO PROCESO</h2>
+ <p>Preparando resultado de demostración...</p>
+ <div id="count">3</div>
+</div>
+
+<div id="ending" class="panel hidden">
+ <h2 class="warning">☠ PROCESO FINALIZADO ☠</h2>
+ <h1 style="color:#ff3030;font-size:35px">
+ ¡¡TE LA CREÍSTE!!
+ </h1>
+ <p style="font-size:24px">😂 ERA UNA BROMA 😂</p>
+ <p class="green">BIENVENIDO A MATRIX, AGENTE.</p>
+ <div style="border:1px dashed #00ff80;padding:12px;margin-top:15px">
+  <p>RESULTADO REAL:</p>
+  <p>NINGÚN TELÉFONO FUE HACKEADO.</p>
+  <p>NINGÚN ARCHIVO FUE ABIERTO.</p>
+  <p>NINGUNA CÁMARA FUE ACTIVADA.</p>
+ </div>
+ <p>Solo era una simulación visual para asustarte un poquito. 😈</p>
+ <button onclick="location.reload()">VOLVER A INICIAR</button>
+</div>
+
+<footer>
+ MATRIX SECURITY LAB · BROMA FICTICIA
+</footer>
+
+</main>
+
 <script>
-function iniciar() {
-  let n = 0;
-  document.getElementById("iniciar").disabled = true;
-  document.getElementById("estado").textContent =
-    "Ejecutando diagnóstico ficticio...";
-  let timer = setInterval(() => {
-    n += 5;
-    document.getElementById("progreso").textContent = n + "%";
-    if (n >= 100) {
-      clearInterval(timer);
-      document.getElementById("estado").textContent =
-        "Simulación finalizada";
-      document.getElementById("resultado").style.display = "block";
-      document.getElementById("iniciar").disabled = false;
-      document.getElementById("iniciar").textContent = "REPETIR";
-      document.getElementById("iniciar").onclick = () => location.reload();
-    }
-  }, 250);
+const messages=[
+"[SYS] Inicializando interfaz MATRIX...",
+"[NET] Preparando diagnóstico visual...",
+"[SCAN] Generando actividad de prueba...",
+"[SYS] Cargando módulos de simulación...",
+"[WARN] Evento ficticio detectado: 0x404",
+"[TRACE] Construyendo mapa de red simulado...",
+"[SCAN] Analizando registros de demostración...",
+"[WARN] Alerta visual de prueba generada...",
+"[SYS] Verificando motor de simulación...",
+"[DONE] Diagnóstico de demostración completado."
+];
+
+let running=false;
+
+function startScan(){
+ if(running)return;
+ running=true;
+
+ document.getElementById("start").disabled=true;
+ document.getElementById("scan").classList.remove("hidden");
+
+ const terminal=document.getElementById("terminal");
+ const bar=document.getElementById("bar");
+ const percent=document.getElementById("percent");
+ const events=document.getElementById("events");
+
+ let i=0;
+ let progress=0;
+
+ const timer=setInterval(()=>{
+  if(i<messages.length){
+   const line=document.createElement("div");
+   line.textContent=messages[i];
+   terminal.appendChild(line);
+   terminal.scrollTop=terminal.scrollHeight;
+   events.textContent="Evento "+(i+1)+" / "+messages.length+" · SIMULADO";
+   i++;
+  }
+
+  progress=Math.min(100,progress+10);
+  bar.style.width=progress+"%";
+  percent.textContent=progress+"%";
+
+  if(progress>=100){
+   clearInterval(timer);
+   setTimeout(beginCountdown,800);
+  }
+ },850);
+}
+
+function beginCountdown(){
+ document.getElementById("countdown").classList.remove("hidden");
+ let number=3;
+ document.getElementById("count").textContent=number;
+
+ const timer=setInterval(()=>{
+  number--;
+  document.getElementById("count").textContent=number;
+
+  if(number<=0){
+   clearInterval(timer);
+   document.getElementById("countdown").classList.add("hidden");
+   document.getElementById("ending").classList.remove("hidden");
+   document.getElementById("ending").scrollIntoView({behavior:"smooth"});
+  }
+ },1000);
 }
 </script>
 </body>
