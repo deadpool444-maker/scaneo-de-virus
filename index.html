@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Protocolo Sombra</title>
+<style>
+body {
+  background: #080808;
+  color: #00ff75;
+  font-family: monospace;
+  text-align: center;
+  padding: 25px 12px;
+}
+h1 { color: #ff3030; }
+.panel {
+  border: 1px solid #00ff75;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 450px;
+  margin: auto;
+}
+button {
+  background: #00aa55;
+  color: black;
+  padding: 14px 22px;
+  border: 0;
+  border-radius: 7px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+#resultado { display: none; color: white; }
+</style>
+</head>
+<body>
+<div class="panel">
+<h1>PROTOCOLO SOMBRA</h1>
+<p>SIMULACIÓN VISUAL DE SEGURIDAD</p>
+<p id="estado">Preparando diagnóstico...</p>
+<h2 id="progreso">0%</h2>
+<button id="iniciar" onclick="iniciar()">INICIAR SIMULACIÓN</button>
+<div id="resultado">
+<h1>😂 ¡ERA UNA BROMA!</h1>
+<p>Tu teléfono está bien.</p>
+<p>No se modificó ningún archivo ni configuración.</p>
+</div>
+</div>
+<script>
+function iniciar() {
+  let n = 0;
+  document.getElementById("iniciar").disabled = true;
+  document.getElementById("estado").textContent =
+    "Ejecutando diagnóstico ficticio...";
+  let timer = setInterval(() => {
+    n += 5;
+    document.getElementById("progreso").textContent = n + "%";
+    if (n >= 100) {
+      clearInterval(timer);
+      document.getElementById("estado").textContent =
+        "Simulación finalizada";
+      document.getElementById("resultado").style.display = "block";
+      document.getElementById("iniciar").disabled = false;
+      document.getElementById("iniciar").textContent = "REPETIR";
+      document.getElementById("iniciar").onclick = () => location.reload();
+    }
+  }, 250);
+}
+</script>
+</body>
+</html>
